@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git url: 'https://github.com/chikkuduchandu/MyFirstJenkinsProject.git', branch: 'main'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Compiling Java files...'
+                bat 'javac HelloWorld.java'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                bat 'javac -cp ".;C:\\Users\\chand\\Documents\\V sem\\CSE\\CSE\\DEVOPS\\project\\junit-4.10.jar" HelloWorldTest.java'
+                bat 'java -cp ".;C:\\Users\\chand\\Documents\\V sem\\CSE\\CSE\\DEVOPS\\project\\junit-4.10.jar" org.junit.runner.JUnitCore HelloWorldTest'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                bat 'jar cvf HelloWorld.jar HelloWorld.class'
+                bat 'xcopy /Y HelloWorld.jar "C:\\Users\\chand\\Documents\\V sem\\CSE\\CSE\\DEVOPS\\project\\"'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up...'
+        }
+    }
+}
